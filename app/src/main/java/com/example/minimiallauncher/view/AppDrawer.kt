@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -30,6 +32,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +42,7 @@ import com.example.minimiallauncher.viewModel.AppLauncherViewModel
 
 @Composable
 fun AppDrawer(viewModel: AppLauncherViewModel) {
-
+    val context = LocalContext.current
     val apps by viewModel.filteredApps.collectAsState()
     val query by viewModel.searchQuery.collectAsState()
     val focusRequester = remember { FocusRequester() }
@@ -87,6 +90,30 @@ fun AppDrawer(viewModel: AppLauncherViewModel) {
         OutlinedTextField(
             value = query,
             onValueChange = viewModel::updatedSearchQuery,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search // Change the 'Enter' key to a 'Search' icon
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    // 1. Get the first filtered app
+                    val firstApp = apps.firstOrNull()
+
+                    // 2. Launch the app if it exists
+                    if (firstApp != null) {
+                        // You'll need the context to launch the intent
+                        // Get LocalContext.current at the top of the AppDrawer composable
+                        val intent = context.packageManager.getLaunchIntentForPackage(firstApp.packageName)
+                        if (intent != null) context.startActivity(intent)
+
+                        // Hide the keyboard after launching the app
+                        // You might also want to close the drawer
+                        keyboardController?.hide()
+                        viewModel.updatedSearchQuery("")
+                        viewModel.toggleDrawerVisibility(false)
+                    }
+
+                }
+            ),
             placeholder = { Text("Search apps") },
             modifier = Modifier
                 .fillMaxWidth()
