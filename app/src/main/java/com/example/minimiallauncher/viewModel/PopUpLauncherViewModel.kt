@@ -3,17 +3,10 @@ package com.example.minimiallauncher.viewModel
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minimiallauncher.model.AppModel
-import com.example.minimiallauncher.model.NotepadRepository
-import com.example.minimiallauncher.model.RetrofitInstance
-import com.example.minimiallauncher.model.WeatherResponse
-import kotlinx.coroutines.Dispatchers
+import com.example.minimiallauncher.Service.fuzzySearchPriority
+import com.example.minimiallauncher.model.SystemAppModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,18 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.net.URL
-import java.util.Locale
 
-class AppLauncherViewModel(application: Application) : AndroidViewModel(application) {
-
-    private  val _notes = MutableStateFlow<List<String>>(emptyList())
-    val notes  : StateFlow<List<String>> = _notes
+class PopUpLauncherViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    private val _appList = MutableStateFlow<List<AppModel>>(emptyList())
+
+    private val _appList = MutableStateFlow<List<SystemAppModel>>(emptyList())
     val appList = _appList.asStateFlow()
 
     private val _drawerVisible = MutableStateFlow(false)
@@ -48,7 +36,7 @@ class AppLauncherViewModel(application: Application) : AndroidViewModel(applicat
     val searchQuery = _searchQuery.asStateFlow()
 
     private val _showSystemUI = MutableSharedFlow<Unit>()
-    val showSyfstemUI = _showSystemUI.asSharedFlow()
+    val showSystemUI = _showSystemUI.asSharedFlow()
 
 
 
@@ -93,7 +81,7 @@ class AppLauncherViewModel(application: Application) : AndroidViewModel(applicat
 
             val apps = resolvedApps.map {
                 val appInfo = it.activityInfo.applicationInfo
-                AppModel(
+                SystemAppModel(
                     appName = it.loadLabel(pm).toString(),
                     packageName = appInfo.packageName,
                     icon = appInfo.loadIcon(pm)
@@ -121,55 +109,12 @@ class AppLauncherViewModel(application: Application) : AndroidViewModel(applicat
     fun TogglePopUpDrawerVisibility(show: Boolean) {
         _popUpDrawerVisible.value = show
     }
-
-
-
-
-}
-
-class NotesViewModel(private val repository: NotepadRepository): ViewModel() {
-    private val _stickyNotes = MutableStateFlow(false)
-    val stickyNotes : StateFlow<Boolean> = _stickyNotes
-
-    fun tooglevisibility(show: Boolean) {
-        _stickyNotes.value = show
-    }
-    var noteText by mutableStateOf("")
-        private set
-
-    init {
-        viewModelScope.launch {
-            val note = repository.getNote()
-            noteText = note?.content ?: ""
-        }
-    }
-
-    fun updateNote(newText: String) {
-        noteText = newText
-        viewModelScope.launch {
-            repository.saveNote(newText)
-        }
-    }
 }
 
 
-class WeatherViewModel : ViewModel() {
-    var weatherData = mutableStateOf<WeatherResponse?>(null)
-        private set
 
-    fun fetchWeather(lat: Double, lon: Double) {
-        viewModelScope.launch {
-            try {
-                val response = RetrofitInstance.api.getWeather(
-                    lat, lon, "6f758ee93617b33db361f5fd8f221140"
-                )
-                weatherData.value = response
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-}
+
+
 
 
 

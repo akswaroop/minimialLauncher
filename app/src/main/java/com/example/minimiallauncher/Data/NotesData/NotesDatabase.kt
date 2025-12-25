@@ -1,11 +1,12 @@
-package com.example.minimiallauncher.model
+package com.example.minimiallauncher.Data.NotesData
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.minimiallauncher.model.NotesModel
 
-@Database(entities = [Notes::class], version = 1)
+@Database(entities = [NotesModel::class], version = 1)
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun notesDao (): NotesDao
     companion object {

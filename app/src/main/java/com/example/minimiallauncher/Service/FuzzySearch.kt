@@ -1,6 +1,5 @@
-package com.example.minimiallauncher.viewModel
+package com.example.minimiallauncher.Service
 
-import android.adservices.ondevicepersonalization.AppInfo
 import kotlin.text.iterator
 
 fun fuzzySearchPriority(appName: String, query: String): Int {

@@ -6,8 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,28 +30,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.minimiallauncher.viewModel.AppLauncherViewModel
+import com.example.minimiallauncher.viewModel.PopUpLauncherViewModel
 
 @Composable
 fun PopupAppDrawer(
     visible: Boolean,
     onDismiss: () -> Unit,
-    appLauncherViewModel: AppLauncherViewModel
+    popUpLauncherViewModel: PopUpLauncherViewModel
 ) {
     val context = LocalContext.current
-    val query by appLauncherViewModel.searchQuery.collectAsState()
+    val query by popUpLauncherViewModel.searchQuery.collectAsState()
 
-    val apps by appLauncherViewModel.filteredApps.collectAsState()
+    val apps by popUpLauncherViewModel.filteredApps.collectAsState()
     val listState = rememberLazyListState()
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -118,7 +112,7 @@ fun PopupAppDrawer(
                     }
                     OutlinedTextField(
                         value = query,
-                        onValueChange = appLauncherViewModel::updatedSearchQuery,
+                        onValueChange = popUpLauncherViewModel::updatedSearchQuery,
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search // Change the 'Enter' key to a 'Search' icon
                         ),
@@ -137,8 +131,8 @@ fun PopupAppDrawer(
                                     // Hide the keyboard after launching the app
                                     // You might also want to close the drawer
                                     keyboardController?.hide()
-                                    appLauncherViewModel.updatedSearchQuery("")
-                                    appLauncherViewModel.toggleDrawerVisibility(false)
+                                    popUpLauncherViewModel.updatedSearchQuery("")
+                                    popUpLauncherViewModel.toggleDrawerVisibility(false)
                                 }
 
                             }

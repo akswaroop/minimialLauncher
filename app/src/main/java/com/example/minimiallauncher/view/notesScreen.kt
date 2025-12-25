@@ -1,7 +1,6 @@
 package com.example.minimiallauncher.view
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.foundation.background
-import com.example.minimiallauncher.model.Notes
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -86,7 +85,7 @@ fun StickyNotepadScreen(viewModel: NotesViewModel, onSwipeLeftToClose: () -> Uni
             ),
             placeholder = {
                 Text(
-                    "Type anything...",
+                    text="Type anything...",
                     color = textColor.copy(alpha = 0.5f)
                 )
             },

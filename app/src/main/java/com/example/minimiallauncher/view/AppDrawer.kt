@@ -1,10 +1,8 @@
 package com.example.minimiallauncher.view
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
 import  androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,15 +34,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.minimiallauncher.model.AppModel
-import com.example.minimiallauncher.viewModel.AppLauncherViewModel
+import com.example.minimiallauncher.model.SystemAppModel
+import com.example.minimiallauncher.viewModel.PopUpLauncherViewModel
 
 
 @Composable
-fun AppDrawer(viewModel: AppLauncherViewModel) {
+fun AppDrawer(viewModel: PopUpLauncherViewModel) {
     val context = LocalContext.current
     val apps by viewModel.filteredApps.collectAsState()
     val query by viewModel.searchQuery.collectAsState()
@@ -145,7 +142,7 @@ fun AppDrawer(viewModel: AppLauncherViewModel) {
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun AppItem(app: AppModel) {
+fun AppItem(app: SystemAppModel) {
     val context = LocalContext.current
 
         Text(

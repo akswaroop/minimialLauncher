@@ -1,4 +1,4 @@
-package com.example.minimiallauncher.model
+package com.example.minimiallauncher.Data.NotesData
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -15,3 +15,4 @@ class NotesViewModelFactory(private val application: Application) : ViewModelPro
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

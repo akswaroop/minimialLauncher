@@ -1,4 +1,6 @@
-package com.example.minimiallauncher.model
+package com.example.minimiallauncher.Data.WeatherData
+
+import com.example.minimiallauncher.model.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
